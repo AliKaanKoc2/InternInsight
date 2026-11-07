@@ -17,6 +17,8 @@ import 'screens/verification/verification_screen.dart';
 import 'screens/admin/admin_screen.dart';
 import 'screens/admin/review_screen.dart';
 
+import 'screens/main_shell.dart';
+
 void main() {
   runApp(const InternInsightApp());
 }
@@ -33,7 +35,7 @@ class InternInsightApp extends StatelessWidget {
       routes: {
         AppRoutes.login: (context) => const LoginScreen(),
         AppRoutes.register: (context) => const RegisterScreen(),
-        AppRoutes.home: (context) => const HomeScreen(),
+        AppRoutes.home: (context) => const MainShell(),
         AppRoutes.search: (context) => const SearchScreen(),
         AppRoutes.organizations: (context) => const OrganizationListScreen(),
         AppRoutes.organizationDetail: (context) => const OrganizationDetailScreen(),
