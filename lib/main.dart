@@ -1,36 +1,51 @@
 import 'package:flutter/material.dart';
 
+import 'core/routes/app_routes.dart';
+
+import 'screens/auth/login_screen.dart';
+import 'screens/auth/register_screen.dart';
+import 'screens/home/home_screen.dart';
+import 'screens/search/search_screen.dart';
+import 'screens/organizations/organization_list_screen.dart';
+import 'screens/organizations/organization_detail_screen.dart';
+import 'screens/organizations/following_screen.dart';
+import 'screens/experience/experience_detail_screen.dart';
+import 'screens/experience/add_experience_screen.dart';
+import 'screens/saved/saved_screen.dart';
+import 'screens/profile/profile_screen.dart';
+import 'screens/verification/verification_screen.dart';
+import 'screens/admin/admin_screen.dart';
+import 'screens/admin/review_screen.dart';
+
 void main() {
-  runApp(const MyApp());
+  runApp(const InternInsightApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class InternInsightApp extends StatelessWidget {
+  const InternInsightApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      title: 'InternInsight',
+      debugShowCheckedModeBanner: false,
+      initialRoute: AppRoutes.login,
+      routes: {
+        AppRoutes.login: (context) => const LoginScreen(),
+        AppRoutes.register: (context) => const RegisterScreen(),
+        AppRoutes.home: (context) => const HomeScreen(),
+        AppRoutes.search: (context) => const SearchScreen(),
+        AppRoutes.organizations: (context) => const OrganizationListScreen(),
+        AppRoutes.organizationDetail: (context) => const OrganizationDetailScreen(),
+        AppRoutes.following: (context) => const FollowingScreen(),
+        AppRoutes.experienceDetail: (context) => const ExperienceDetailScreen(),
+        AppRoutes.addExperience: (context) => const AddExperienceScreen(),
+        AppRoutes.saved: (context) => const SavedScreen(),
+        AppRoutes.profile: (context) => const ProfileScreen(),
+        AppRoutes.verification: (context) => const VerificationScreen(),
+        AppRoutes.admin: (context) => const AdminScreen(),
+        AppRoutes.review: (context) => const ReviewScreen(),
+      },
     );
   }
 }
