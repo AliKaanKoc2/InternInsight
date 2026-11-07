@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'core/routes/app_routes.dart';
+import 'core/theme/app_theme.dart';
 
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/register_screen.dart';
@@ -16,7 +17,6 @@ import 'screens/profile/profile_screen.dart';
 import 'screens/verification/verification_screen.dart';
 import 'screens/admin/admin_screen.dart';
 import 'screens/admin/review_screen.dart';
-
 import 'screens/main_shell.dart';
 
 void main() {
@@ -32,6 +32,7 @@ class InternInsightApp extends StatelessWidget {
       title: 'InternInsight',
       debugShowCheckedModeBanner: false,
       initialRoute: AppRoutes.login,
+      theme: AppTheme.light,
       routes: {
         AppRoutes.login: (context) => const LoginScreen(),
         AppRoutes.register: (context) => const RegisterScreen(),
