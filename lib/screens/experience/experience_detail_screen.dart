@@ -141,6 +141,48 @@ class ExperienceDetailScreen extends StatelessWidget {
                     '• Some tasks were repetitive',
                 style: AppTextStyles.body,
               ),
+              SizedBox(height: AppSpacing.lg),
+              Divider(color: AppColors.border),
+              SizedBox(height: AppSpacing.md),
+
+              Text(
+                'Interview process',
+                style: AppTextStyles.heading,
+              ),
+              SizedBox(height: AppSpacing.sm),
+              Text(
+                'Application channel: Company website',
+                style: AppTextStyles.body,
+              ),
+              SizedBox(height: AppSpacing.sm),
+              Text(
+                'Rounds: 2 • Difficulty: Moderate',
+                style: AppTextStyles.body,
+              ),
+              SizedBox(height: AppSpacing.sm),
+              Text(
+                'The process started with an HR interview, followed by '
+                    'a technical interview covering programming fundamentals '
+                    'and a short coding exercise.',
+                style: AppTextStyles.body,
+              ),
+              SizedBox(height: AppSpacing.lg),
+
+              Text(
+                'Technologies used',
+                style: AppTextStyles.heading,
+              ),
+              SizedBox(height: AppSpacing.sm),
+              Wrap(
+                spacing: AppSpacing.sm,
+                runSpacing: AppSpacing.sm,
+                children: [
+                  Chip(label: Text('Python')),
+                  Chip(label: Text('SQL')),
+                  Chip(label: Text('Git')),
+                  Chip(label: Text('REST APIs')),
+                ],
+              ),
             ],
           )
         )
