@@ -70,6 +70,77 @@ class ExperienceDetailScreen extends StatelessWidget {
                   ),
                 ],
               ),
+              SizedBox(height: AppSpacing.lg),
+              Divider(color: AppColors.border),
+              SizedBox(height: AppSpacing.md),
+
+              Text(
+                'Overall experience',
+                style: AppTextStyles.heading,
+              ),
+              SizedBox(height: AppSpacing.sm),
+
+              Row(
+                children: [
+                  Icon(
+                    Icons.star,
+                    color: AppColors.warning,
+                    size: 22,
+                  ),
+                  SizedBox(width: AppSpacing.sm),
+                  Text(
+                    '4 / 5',
+                    style: AppTextStyles.heading,
+                  ),
+                ],
+              ),
+              SizedBox(height: AppSpacing.sm),
+
+              Text(
+                'I would recommend this internship.',
+                style: AppTextStyles.body,
+              ),
+              SizedBox(height: AppSpacing.md),
+
+              Text(
+                'My review',
+                style: AppTextStyles.heading,
+              ),
+              SizedBox(height: AppSpacing.sm),
+
+              Text(
+                'During my internship, I worked on backend APIs and helped '
+                    'the team test new features. Regular code reviews improved '
+                    'my coding skills and understanding of teamwork.',
+                style: AppTextStyles.body,
+              ),
+              SizedBox(height: AppSpacing.md),
+
+              Text(
+                'Pros',
+                style: AppTextStyles.heading,
+              ),
+              SizedBox(height: AppSpacing.sm),
+
+              Text(
+                '• Supportive team and regular mentoring\n'
+                    '• Hands-on experience with real projects\n'
+                    '• Flexible hybrid working arrangement',
+                style: AppTextStyles.body,
+              ),
+              SizedBox(height: AppSpacing.md),
+
+              Text(
+                'Cons',
+                style: AppTextStyles.heading,
+              ),
+              SizedBox(height: AppSpacing.sm),
+
+              Text(
+                '• Limited onboarding documentation\n'
+                    '• Some tasks were repetitive',
+                style: AppTextStyles.body,
+              ),
             ],
           )
         )
