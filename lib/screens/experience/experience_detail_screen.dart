@@ -21,15 +21,54 @@ class ExperienceDetailScreen extends StatelessWidget {
           padding: AppSpacing.screen,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const[
+            children: const [
               Text(
-                'Internship details',
-                 style: AppTextStyles.heading,
+                'Example Company',
+                style: AppTextStyles.title,
               ),
               SizedBox(height: AppSpacing.sm),
               Text(
-                'Select an experience to view its details.',
-                 style: AppTextStyles.body,
+                'Software Engineering Intern',
+                style: AppTextStyles.heading,
+              ),
+              SizedBox(height: AppSpacing.xs),
+              Text(
+                'Engineering Department',
+                style: AppTextStyles.body,
+              ),
+              SizedBox(height: AppSpacing.md),
+              Row(
+                children: [
+                  Icon(
+                    Icons.location_on_outlined,
+                    size: 18,
+                    color: AppColors.textSecondary,
+                  ),
+                  SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: Text(
+                      'Istanbul, Türkiye • Hybrid',
+                      style: AppTextStyles.body,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: AppSpacing.sm),
+              Row(
+                children: [
+                  Icon(
+                    Icons.calendar_month_outlined,
+                    size: 18,
+                    color: AppColors.textSecondary,
+                  ),
+                  SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: Text(
+                      'July 2026 – September 2026',
+                      style: AppTextStyles.body,
+                    ),
+                  ),
+                ],
               ),
             ],
           )
