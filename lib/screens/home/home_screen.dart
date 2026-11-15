@@ -73,11 +73,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 }).toList(),
               ),
               const SizedBox(height: AppSpacing.md),
-              const Expanded(
+              Expanded(
                 child: Center(
-                  child: Text(
-                    'Experience cards will appear here.',
-                    style: AppTextStyles.caption,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        AppRoutes.experienceDetail,
+                      );
+                    },
+                    child: const Text('Preview experience details'),
                   ),
                 ),
               ),
