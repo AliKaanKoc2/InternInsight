@@ -134,6 +134,19 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
 
+              const SizedBox(height: AppSpacing.sm),
+
+              OutlinedButton.icon(
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    AppRoutes.addExperience,
+                  );
+                },
+                icon: const Icon(Icons.add),
+                label: const Text('Share an experience'),
+              ),
+
               const SizedBox(height: AppSpacing.lg),
               const Divider(color: AppColors.border),
 
