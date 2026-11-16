@@ -104,6 +104,56 @@ class ProfileScreen extends StatelessWidget {
                   Navigator.pushNamed(context, AppRoutes.verification);
                 },
               ),
+              const SizedBox(height: AppSpacing.lg),
+              const Divider(color: AppColors.border),
+
+              ListTile(
+                leading: const Icon(
+                  Icons.logout,
+                  color: AppColors.error,
+                ),
+                title: const Text(
+                  'Log out',
+                  style: AppTextStyles.body,
+                ),
+                onTap: () async {
+                  final bool? confirmed = await showDialog<bool>(
+                    context: context,
+                    builder: (dialogContext) {
+                      return AlertDialog(
+                        title: const Text('Log out?'),
+                        content: const Text(
+                          'Are you sure you want to log out?',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(dialogContext, false);
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(dialogContext, true);
+                            },
+                            child: const Text('Log out'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+
+                  if (!context.mounted) return;
+
+                  if (confirmed == true) {
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      AppRoutes.login,
+                          (route) => false,
+                    );
+                  }
+                },
+              ),
             ],
           ),
         ),
