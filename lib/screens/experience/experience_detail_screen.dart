@@ -107,7 +107,7 @@ class ExperienceDetailScreen extends StatelessWidget {
                   ),
                   SizedBox(width: AppSpacing.sm),
                   Text(
-                    '4 / 5',
+                    '${experience.rating} / 5',
                     style: AppTextStyles.heading,
                   ),
                 ],
@@ -115,7 +115,9 @@ class ExperienceDetailScreen extends StatelessWidget {
               SizedBox(height: AppSpacing.sm),
 
               Text(
-                'I would recommend this internship.',
+                experience.recommends
+                    ? 'I would recommend this internship.'
+                    : 'I would not recommend this internship.',
                 style: AppTextStyles.body,
               ),
               SizedBox(height: AppSpacing.md),
@@ -127,9 +129,7 @@ class ExperienceDetailScreen extends StatelessWidget {
               SizedBox(height: AppSpacing.sm),
 
               Text(
-                'During my internship, I worked on backend APIs and helped '
-                    'the team test new features. Regular code reviews improved '
-                    'my coding skills and understanding of teamwork.',
+                experience.review,
                 style: AppTextStyles.body,
               ),
               SizedBox(height: AppSpacing.md),
@@ -141,9 +141,7 @@ class ExperienceDetailScreen extends StatelessWidget {
               SizedBox(height: AppSpacing.sm),
 
               Text(
-                '• Supportive team and regular mentoring\n'
-                    '• Hands-on experience with real projects\n'
-                    '• Flexible hybrid working arrangement',
+                experience.pros.map((pro) => '• $pro').join('\n'),
                 style: AppTextStyles.body,
               ),
               SizedBox(height: AppSpacing.md),
@@ -155,8 +153,7 @@ class ExperienceDetailScreen extends StatelessWidget {
               SizedBox(height: AppSpacing.sm),
 
               Text(
-                '• Limited onboarding documentation\n'
-                    '• Some tasks were repetitive',
+                experience.cons.map((con) => '• $con').join('\n'),
                 style: AppTextStyles.body,
               ),
               SizedBox(height: AppSpacing.lg),
@@ -169,19 +166,18 @@ class ExperienceDetailScreen extends StatelessWidget {
               ),
               SizedBox(height: AppSpacing.sm),
               Text(
-                'Application channel: Company website',
+                'Application channel: ${experience.applicationChannel}',
                 style: AppTextStyles.body,
               ),
               SizedBox(height: AppSpacing.sm),
               Text(
-                'Rounds: 2 • Difficulty: Moderate',
+                'Rounds: ${experience.interviewRounds} • '
+                'Difficulty: ${experience.interviewDifficulty}',
                 style: AppTextStyles.body,
               ),
               SizedBox(height: AppSpacing.sm),
               Text(
-                'The process started with an HR interview, followed by '
-                    'a technical interview covering programming fundamentals '
-                    'and a short coding exercise.',
+                experience.interviewDescription,
                 style: AppTextStyles.body,
               ),
               SizedBox(height: AppSpacing.lg),
@@ -194,12 +190,11 @@ class ExperienceDetailScreen extends StatelessWidget {
               Wrap(
                 spacing: AppSpacing.sm,
                 runSpacing: AppSpacing.sm,
-                children: [
-                  Chip(label: Text('Python')),
-                  Chip(label: Text('SQL')),
-                  Chip(label: Text('Git')),
-                  Chip(label: Text('REST APIs')),
-                ],
+                children: experience.technologies.map((technology) {
+                  return Chip(
+                    label: Text(technology),
+                  );
+                }).toList(),
               ),
             ],
           )
