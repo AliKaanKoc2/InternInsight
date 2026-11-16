@@ -106,6 +106,36 @@ class ProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: AppSpacing.lg),
               const Divider(color: AppColors.border),
+              const SizedBox(height: AppSpacing.md),
+
+              const Text(
+                'My experiences',
+                style: AppTextStyles.heading,
+              ),
+              const SizedBox(height: AppSpacing.sm),
+
+              const Card(
+                child: Padding(
+                  padding: EdgeInsets.all(AppSpacing.md),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'No experiences shared yet',
+                        style: AppTextStyles.body,
+                      ),
+                      SizedBox(height: AppSpacing.sm),
+                      Text(
+                        'Share your internship experience to help other students.',
+                        style: AppTextStyles.caption,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: AppSpacing.lg),
+              const Divider(color: AppColors.border),
 
               ListTile(
                 leading: const Icon(
