@@ -7,6 +7,7 @@ import '../../core/theme/app_text_styles.dart';
 import '../../data/mock_data.dart';
 import '../../data/models/experience.dart';
 
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -49,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final experiences = _filteredExperiences;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -108,6 +110,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     final experience = experiences[index];
 
                     return Card(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              AppRoutes.experienceDetail,
+                              arguments: experience,
+                            );
+                          },
                       child: Padding(
                         padding: const EdgeInsets.all(AppSpacing.md),
                         child: Column(
@@ -162,6 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
+                    ),
                     );
                   },
                 ),
