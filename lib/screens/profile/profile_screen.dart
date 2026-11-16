@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/routes/app_routes.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -23,7 +24,7 @@ class ProfileScreen extends StatelessWidget {
           padding: AppSpacing.screen,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: const [
+            children: [
               Center(
                 child: CircleAvatar(
                   radius: 36,
@@ -55,6 +56,53 @@ class ProfileScreen extends StatelessWidget {
                 'Computer Science • Class of 2027',
                 style: AppTextStyles.caption,
                 textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              const Divider(color: AppColors.border),
+
+              ListTile(
+                leading: const Icon(
+                  Icons.bookmark_outline,
+                  color: AppColors.primary,
+                ),
+                title: const Text(
+                  'Saved experiences',
+                  style: AppTextStyles.body,
+                ),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.saved);
+                },
+              ),
+
+              ListTile(
+                leading: const Icon(
+                  Icons.business_outlined,
+                  color: AppColors.primary,
+                ),
+                title: const Text(
+                  'Following',
+                  style: AppTextStyles.body,
+                ),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.following);
+                },
+              ),
+
+              ListTile(
+                leading: const Icon(
+                  Icons.verified_user_outlined,
+                  color: AppColors.primary,
+                ),
+                title: const Text(
+                  'Internship verification',
+                  style: AppTextStyles.body,
+                ),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.verification);
+                },
               ),
             ],
           ),
