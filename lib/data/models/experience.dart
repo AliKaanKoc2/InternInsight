@@ -1,5 +1,6 @@
 class Experience {
   final String id;
+  final String authorId;
   final String company;
   final String position;
   final String department;
@@ -25,6 +26,7 @@ class Experience {
 
   const Experience({
     required this.id,
+    required this.authorId,
     required this.company,
     required this.position,
     required this.department,

@@ -4,12 +4,17 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/routes/app_routes.dart';
+import '../../data/mock_data.dart';
+import '../../widgets/experience_card.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final myExperiences = mockExperiences
+        .where((experience) => experience.authorId == mockCurrentUserId)
+        .toList();
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -114,25 +119,43 @@ class ProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: AppSpacing.sm),
 
-              const Card(
-                child: Padding(
-                  padding: EdgeInsets.all(AppSpacing.md),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'No experiences shared yet',
-                        style: AppTextStyles.body,
-                      ),
-                      SizedBox(height: AppSpacing.sm),
-                      Text(
-                        'Share your internship experience to help other students.',
-                        style: AppTextStyles.caption,
-                      ),
-                    ],
+              if (myExperiences.isEmpty)
+                const Card(
+                  child: Padding(
+                    padding: EdgeInsets.all(AppSpacing.md),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'No experiences shared yet',
+                          style: AppTextStyles.body,
+                        ),
+                        SizedBox(height: AppSpacing.sm),
+                        Text(
+                          'Share your internship experience to help other students.',
+                          style: AppTextStyles.caption,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ),
+                )
+              else
+                ...myExperiences.map((experience) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                    child: ExperienceCard(
+                      key: ValueKey(experience.id),
+                      experience: experience,
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          AppRoutes.experienceDetail,
+                          arguments: experience,
+                        );
+                      },
+                    ),
+                  );
+                }),
 
               const SizedBox(height: AppSpacing.sm),
 
