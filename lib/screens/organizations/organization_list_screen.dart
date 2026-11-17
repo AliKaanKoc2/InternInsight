@@ -12,7 +12,13 @@ class OrganizationListScreen extends StatefulWidget {
 class _OrganizationListScreenState extends State<OrganizationListScreen> {
   int _selectedTab = 0;
   final Set<String> _selectedIndustries = {};
-  final List<String> _industries = ['Software', 'Finance', 'Gaming', 'Health', 'Defense'];
+  final List<String> _industries = [
+    'Software',
+    'Finance',
+    'Gaming',
+    'Health',
+    'Defense',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -55,40 +61,44 @@ class _OrganizationListScreenState extends State<OrganizationListScreen> {
                     width: 1,
                     height: 20,
                     color: AppColors.border,
-                    margin: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.sm,
+                    ),
                   ),
                   Expanded(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            for (final industry in _industries) ...[
-                              ChoiceChip(
-                                label: Text(industry),
-                                selected: _selectedIndustries.contains(industry),
-                                onSelected: (_) {
-                                  setState(() {
-                                    if(_selectedIndustries.contains(industry))
-                                      {
-                                        _selectedIndustries.remove(industry);
-                                      }
-                                    else {
-                                      _selectedIndustries.add(industry);
-                                    };
-                                  });
-                                },
-                              ),
-                              const SizedBox(width: AppSpacing.sm),
-                            ],
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          for (final industry in _industries) ...[
+                            ChoiceChip(
+                              label: Text(industry),
+                              selected: _selectedIndustries.contains(industry),
+                              onSelected: (_) {
+                                setState(() {
+                                  if (_selectedIndustries.contains(industry)) {
+                                    _selectedIndustries.remove(industry);
+                                  } else {
+                                    _selectedIndustries.add(industry);
+                                  }
+                                });
+                              },
+                            ),
+                            const SizedBox(width: AppSpacing.sm),
                           ],
-                        ),
-                      )
-                  )
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
             Expanded(
-              child: Center(child: Text('Tab: $_selectedTab, Industries: $_selectedIndustries')),
+              child: Center(
+                child: Text(
+                  'Tab: $_selectedTab, Industries: $_selectedIndustries',
+                ),
+              ),
             ),
           ],
         ),
