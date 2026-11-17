@@ -12,13 +12,7 @@ class OrganizationListScreen extends StatefulWidget {
 class _OrganizationListScreenState extends State<OrganizationListScreen> {
   int _selectedTab = 0;
   final Set<String> _selectedIndustries = {};
-  final List<String> _industries = [
-    'Software',
-    'Finance',
-    'Gaming',
-    'Health',
-    'Defense',
-  ];
+  final List<String> _industries = ['Software', 'Finance', 'Gaming', 'Health', 'Defense', 'Automotive', 'Consulting', 'Education'];
 
   @override
   Widget build(BuildContext context) {
