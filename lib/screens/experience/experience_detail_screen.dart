@@ -4,6 +4,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../data/models/experience.dart';
+import '../../data/saved_experiences.dart';
 
 class ExperienceDetailScreen extends StatelessWidget {
   const ExperienceDetailScreen({super.key});
@@ -29,11 +30,33 @@ class ExperienceDetailScreen extends StatelessWidget {
     final experience = arguments;
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-          title: const Text('Experience',
-          style: AppTextStyles.title
+        appBar: AppBar(
+          title: const Text(
+            'Experience',
+            style: AppTextStyles.title,
           ),
-      ),
+          actions: [
+            ListenableBuilder(
+              listenable: savedExperiences,
+              builder: (context, child) {
+                final isSaved = savedExperiences.contains(experience.id);
+
+                return IconButton(
+                  tooltip: isSaved
+                      ? 'Remove from saved'
+                      : 'Save experience',
+                  icon: Icon(
+                    isSaved ? Icons.bookmark : Icons.bookmark_outline,
+                    color: AppColors.primary,
+                  ),
+                  onPressed: () {
+                    savedExperiences.toggle(experience);
+                  },
+                );
+              },
+            ),
+          ],
+        ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: AppSpacing.screen,
