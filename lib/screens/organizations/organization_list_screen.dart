@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intern_insight/core/theme/app_colors.dart';
 import 'package:intern_insight/core/theme/app_spacing.dart';
+import 'package:intern_insight/data/mock_organizations.dart';
+import 'package:intern_insight/data/models/organization.dart';
 
 class OrganizationListScreen extends StatefulWidget {
   const OrganizationListScreen({super.key});
@@ -13,6 +15,24 @@ class _OrganizationListScreenState extends State<OrganizationListScreen> {
   int _selectedTab = 0;
   final Set<String> _selectedIndustries = {};
   final List<String> _industries = ['Software', 'Finance', 'Gaming', 'Health', 'Defense', 'Automotive', 'Consulting', 'Education'];
+
+  final List<String> _tabTypes = ['All', 'Company', 'University', 'Research'];
+
+  List<Organization> get _filteredOrganizations {
+    final type = _tabTypes[_selectedTab];
+    final List<Organization> result = [];
+
+    for (final org in mockOrganizations) {
+      final typeMatches = (type == 'All' || org.type == type);
+      final industryMatches = (_selectedIndustries.isEmpty || _selectedIndustries.contains(org.industry));
+
+      if (typeMatches && industryMatches) {
+        result.add(org);
+      }
+    }
+
+    return result;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +110,7 @@ class _OrganizationListScreenState extends State<OrganizationListScreen> {
             Expanded(
               child: Center(
                 child: Text(
-                  'Tab: $_selectedTab, Industries: $_selectedIndustries',
+                  '${_filteredOrganizations.length} organizations',
                 ),
               ),
             ),
