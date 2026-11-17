@@ -5,6 +5,9 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../data/models/experience.dart';
 import '../../data/saved_experiences.dart';
+import '../../data/mock_data.dart';
+import '../../widgets/experience_card.dart';
+import '../../core/routes/app_routes.dart';
 
 class ExperienceDetailScreen extends StatelessWidget {
   const ExperienceDetailScreen({super.key});
@@ -28,6 +31,12 @@ class ExperienceDetailScreen extends StatelessWidget {
     }
 
     final experience = arguments;
+    final similarExperiences = mockExperiences.where((other) {
+      return other.id != experience.id &&
+          other.technologies.any(
+                (technology) => experience.technologies.contains(technology),
+          );
+    }).take(2).toList();
     return Scaffold(
       backgroundColor: AppColors.background,
         appBar: AppBar(
@@ -219,6 +228,32 @@ class ExperienceDetailScreen extends StatelessWidget {
                   );
                 }).toList(),
               ),
+              if (similarExperiences.isNotEmpty) ...[
+                const SizedBox(height: AppSpacing.lg),
+                const Divider(color: AppColors.border),
+                const SizedBox(height: AppSpacing.md),
+                const Text(
+                  'Similar experiences',
+                  style: AppTextStyles.heading,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                ...similarExperiences.map((similar) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                    child: ExperienceCard(
+                      key: ValueKey(similar.id),
+                      experience: similar,
+                      onTap: () {
+                        Navigator.pushReplacementNamed(
+                          context,
+                          AppRoutes.experienceDetail,
+                          arguments: similar,
+                        );
+                      },
+                    ),
+                  );
+                }),
+              ],
             ],
           )
         )
