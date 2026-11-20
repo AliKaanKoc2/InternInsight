@@ -5,6 +5,7 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../data/followed_organizations.dart';
 import '../../core/routes/app_routes.dart';
+import '../../data/mock_data.dart';
 
 class FollowingScreen extends StatelessWidget {
   const FollowingScreen({super.key});
@@ -55,60 +56,107 @@ class FollowingScreen extends StatelessWidget {
               );
             }
 
-            return ListView.separated(
-              padding: AppSpacing.screen,
-              itemCount: organizations.length,
-              separatorBuilder: (context, index) {
-                return const SizedBox(height: AppSpacing.sm);
-              },
-              itemBuilder: (context, index) {
-                final organization = organizations[index];
-
-                return Card(
-                  key: ValueKey(organization.id),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          AppRoutes.organizationDetail,
-                          arguments: organization,
-                        );
-                      },
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppSpacing.md),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          organization.name,
-                          style: AppTextStyles.heading,
-                        ),
-                        const SizedBox(height: AppSpacing.xs),
-                        Text(
-                          '${organization.type} • ${organization.industry}',
-                          style: AppTextStyles.body,
-                        ),
-                        const SizedBox(height: AppSpacing.sm),
-                        Text(
-                          organization.location,
-                          style: AppTextStyles.caption,
-                        ),
-                        const SizedBox(height: AppSpacing.md),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: OutlinedButton(
-                            onPressed: () {
-                              followedOrganizations.remove(organization.id);
-                            },
-                            child: const Text('Unfollow'),
-                          ),
-                        ),
-                      ],
-                    ),
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: AppSpacing.screen,
+                  child: Text(
+                    'Following ${organizations.length} organizations',
+                    style: AppTextStyles.label,
                   ),
                 ),
-                );
-              },
+                Expanded(
+                  child: ListView.separated(
+                    padding: AppSpacing.screen,
+                    itemCount: organizations.length,
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(height: AppSpacing.sm);
+                    },
+                    itemBuilder: (context, index) {
+                      final organization = organizations[index];
+                      final organizationExperiences = mockExperiences
+                          .where((experience) => experience.organizationId == organization.id)
+                          .toList();
+
+                      final averageRating = organizationExperiences.isEmpty
+                          ? null
+                          : organizationExperiences
+                          .fold<double>(0, (sum, experience) => sum + experience.rating) /
+                          organizationExperiences.length;
+
+                      final experienceCount = organizationExperiences.length;
+
+                      final experienceCountLabel = experienceCount == 1
+                          ? '1 experience'
+                          : '$experienceCount experiences';
+
+                      return Card(
+                        key: ValueKey(organization.id),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              AppRoutes.organizationDetail,
+                              arguments: organization,
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(AppSpacing.md),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Icon(
+                                  Icons.business_outlined,
+                                  size: 32,
+                                  color: AppColors.primary,
+                                ),
+                                const SizedBox(width: AppSpacing.sm),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        organization.name,
+                                        style: AppTextStyles.label,
+                                      ),
+                                      const SizedBox(height: AppSpacing.xs),
+                                      Text(
+                                        '${organization.industry} • ${organization.location}',
+                                        style: AppTextStyles.caption,
+                                      ),
+                                      const SizedBox(height: AppSpacing.xs),
+                                      Text(
+                                        averageRating == null
+                                            ? 'No reviews yet • $experienceCountLabel'
+                                            : '★ ${averageRating.toStringAsFixed(1)} • $experienceCountLabel',
+                                        style: AppTextStyles.caption,
+                                      ),
+                                      const SizedBox(height: AppSpacing.sm),
+                                      OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                          minimumSize: const Size(0, 36),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: AppSpacing.sm,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          followedOrganizations.remove(organization.id);
+                                        },
+                                        child: const Text('Unfollow'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             );
           },
         ),

@@ -28,11 +28,64 @@ class ExperienceCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: AppColors.background,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: AppColors.border),
+                    ),
+                    child: const Icon(
+                      Icons.business_outlined,
+                      color: AppColors.primary,
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
                   Expanded(
-                    child: Text(
-                      experience.company,
-                      style: AppTextStyles.heading,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Wrap(
+                          spacing: AppSpacing.sm,
+                          runSpacing: AppSpacing.xs,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Text(
+                              '${experience.company} · ${experience.department}',
+                              style: AppTextStyles.label,
+                            ),
+                            if (experience.isVerified)
+                              const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.verified,
+                                    size: 14,
+                                    color: AppColors.success,
+                                  ),
+                                  SizedBox(width: AppSpacing.xs),
+                                  Text(
+                                    'Verified',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.success,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: AppSpacing.xs),
+                        Text(
+                          experience.position,
+                          style: AppTextStyles.body,
+                        ),
+                      ],
                     ),
                   ),
                   if (onRemove != null)
@@ -43,16 +96,7 @@ class ExperienceCard extends StatelessWidget {
                     ),
                 ],
               ),
-              const SizedBox(height: AppSpacing.xs),
-              Text(
-                experience.position,
-                style: AppTextStyles.body,
-              ),
               const SizedBox(height: AppSpacing.sm),
-              Text(
-                '${experience.location} • ${experience.workType}',
-                style: AppTextStyles.caption,
-              ),
               const SizedBox(height: AppSpacing.sm),
               Wrap(
                 spacing: AppSpacing.md,
@@ -74,15 +118,23 @@ class ExperienceCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  if (experience.isVerified)
-                    const Chip(
-                      avatar: Icon(
-                        Icons.verified,
-                        size: 18,
-                        color: AppColors.success,
+                  ...experience.technologies.take(3).map((technology) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.sm,
+                        vertical: AppSpacing.xs,
                       ),
-                      label: Text('Verified'),
-                    ),
+                      decoration: BoxDecoration(
+                        color: AppColors.background,
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: AppColors.border),
+                      ),
+                      child: Text(
+                        technology,
+                        style: AppTextStyles.caption,
+                      ),
+                    );
+                  }),
                 ],
               ),
             ],

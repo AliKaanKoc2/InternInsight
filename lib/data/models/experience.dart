@@ -21,6 +21,7 @@ class Experience {
   final int interviewRounds;
   final String interviewDifficulty;
   final String interviewDescription;
+  final String organizationId;
 
   final List<String> technologies;
 
@@ -45,5 +46,6 @@ class Experience {
     required this.interviewDifficulty,
     required this.interviewDescription,
     required this.technologies,
+    required this.organizationId,
   });
 }

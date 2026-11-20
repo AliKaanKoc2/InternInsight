@@ -1,10 +1,12 @@
 import 'models/experience.dart';
 const mockCurrentUserId = 'user_001';
+const mockIsAdmin = true;
 
 final List<Experience> mockExperiences = [
   Experience(
     id: 'exp_001',
     authorId: mockCurrentUserId,
+    organizationId: 'org_001',
     company: 'Example Company',
     position: 'Software Engineering Intern',
     department: 'Engineering',
@@ -35,6 +37,7 @@ final List<Experience> mockExperiences = [
   Experience(
     id: 'exp_002',
     authorId: 'user_002',
+    organizationId: 'org_002',
     company: 'Sample Research Lab',
     position: 'Research Intern',
     department: 'Machine Learning',
@@ -64,6 +67,7 @@ final List<Experience> mockExperiences = [
   Experience(
     id: 'exp_003',
     authorId: mockCurrentUserId,
+    organizationId: 'org_003',
     company: 'Demo Digital',
     position: 'Mobile Development Intern',
     department: 'Product Development',

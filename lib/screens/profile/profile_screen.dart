@@ -6,9 +6,165 @@ import '../../core/theme/app_text_styles.dart';
 import '../../core/routes/app_routes.dart';
 import '../../data/mock_data.dart';
 import '../../widgets/experience_card.dart';
+import '../../data/saved_experiences.dart';
+import '../../data/followed_organizations.dart';
 
-class ProfileScreen extends StatelessWidget {
+
+
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  String _name = 'Example Student';
+  String _major = 'Computer Science';
+  int _graduationYear = 2027;
+
+  String get _initials {
+    final words = _name.trim().split(RegExp(r'\s+'));
+
+    return words
+        .where((word) => word.isNotEmpty)
+        .take(2)
+        .map((word) => word[0].toUpperCase())
+        .join();
+  }
+
+  Future<void> _editProfile() async {
+    final formKey = GlobalKey<FormState>();
+
+    String editedName = _name;
+    String editedMajor = _major;
+    int editedYear = _graduationYear;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('Edit profile'),
+          content: SingleChildScrollView(
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'Full name',
+                    style: AppTextStyles.label,
+                  ),
+                  const SizedBox(height: 2),
+
+                  TextFormField(
+                    initialValue: _name,
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 12,
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Enter your name.';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      editedName = value!.trim();
+                    },
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  const Text(
+                    'Major',
+                    style: AppTextStyles.label,
+                  ),
+                  const SizedBox(height: 2),
+
+                  TextFormField(
+                    initialValue: _major,
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 12,
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Enter your major.';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      editedMajor = value!.trim();
+                    },
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  const Text(
+                    'Graduation Year',
+                    style: AppTextStyles.label,
+                  ),
+                  const SizedBox(height: 2),
+
+                  TextFormField(
+                    initialValue: _graduationYear.toString(),
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 12,
+                      ),
+                    ),
+                    validator: (value) {
+                      final year = int.tryParse(value?.trim() ?? '');
+
+                      if (year == null || year < 2000 || year > 2100) {
+                        return 'Enter a year between 2000 and 2100.';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      editedYear = int.parse(value!.trim());
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(dialogContext, false);
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                if (formKey.currentState!.validate()) {
+                  formKey.currentState!.save();
+                  Navigator.pop(dialogContext, true);
+                }
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (!mounted || confirmed != true) return;
+
+    setState(() {
+      _name = editedName;
+      _major = editedMajor;
+      _graduationYear = editedYear;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,39 +186,55 @@ class ProfileScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Center(
-                child: CircleAvatar(
-                  radius: 36,
-                  backgroundColor: AppColors.primary,
-                  child: Text(
-                    'ES',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.surface,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                   CircleAvatar(
+                    radius: 28,
+                    backgroundColor: AppColors.primary,
+                    child: Text(
+                      _initials,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.surface,
+                      ),
                     ),
                   ),
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _name,
+                          style: AppTextStyles.heading,
+                        ),
+                        SizedBox(height: AppSpacing.xs),
+                        Text(
+                          '$_major • Class of $_graduationYear',
+                          style: AppTextStyles.caption,
+                        ),
+                        SizedBox(height: AppSpacing.xs),
+                        Text(
+                          'student@example.com',
+                          style: AppTextStyles.caption,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: AppSpacing.sm),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                  onPressed: _editProfile,
+                  child: const Text('Edit profile'),
                 ),
               ),
-              SizedBox(height: AppSpacing.md),
-              Text(
-                'Example Student',
-                style: AppTextStyles.title,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: AppSpacing.sm),
-              Text(
-                'student@example.com',
-                style: AppTextStyles.body,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: AppSpacing.sm),
-              Text(
-                'Computer Science • Class of 2027',
-                style: AppTextStyles.caption,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: AppSpacing.lg),
+
               const Divider(color: AppColors.border),
 
               ListTile(
@@ -74,7 +246,22 @@ class ProfileScreen extends StatelessWidget {
                   'Saved experiences',
                   style: AppTextStyles.body,
                 ),
-                trailing: const Icon(Icons.chevron_right),
+                trailing: ListenableBuilder(
+                  listenable: savedExperiences,
+                  builder: (context, child) {
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '${savedExperiences.items.length}',
+                          style: AppTextStyles.caption,
+                        ),
+                        const SizedBox(width: AppSpacing.sm),
+                        const Icon(Icons.chevron_right),
+                      ],
+                    );
+                  },
+                ),
                 onTap: () {
                   Navigator.pushNamed(context, AppRoutes.saved);
                 },
@@ -89,7 +276,22 @@ class ProfileScreen extends StatelessWidget {
                   'Following',
                   style: AppTextStyles.body,
                 ),
-                trailing: const Icon(Icons.chevron_right),
+                trailing: ListenableBuilder(
+                  listenable: followedOrganizations,
+                  builder: (context, child) {
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '${followedOrganizations.items.length}',
+                          style: AppTextStyles.caption,
+                        ),
+                        const SizedBox(width: AppSpacing.sm),
+                        const Icon(Icons.chevron_right),
+                      ],
+                    );
+                  },
+                ),
                 onTap: () {
                   Navigator.pushNamed(context, AppRoutes.following);
                 },
@@ -109,6 +311,26 @@ class ProfileScreen extends StatelessWidget {
                   Navigator.pushNamed(context, AppRoutes.verification);
                 },
               ),
+
+              if (mockIsAdmin)
+                ListTile(
+                  leading: const Icon(
+                    Icons.admin_panel_settings_outlined,
+                    color: AppColors.primary,
+                  ),
+                  title: const Text(
+                    'Admin verification',
+                    style: AppTextStyles.body,
+                  ),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      AppRoutes.admin,
+                    );
+                  },
+                ),
+
               const SizedBox(height: AppSpacing.lg),
               const Divider(color: AppColors.border),
               const SizedBox(height: AppSpacing.md),

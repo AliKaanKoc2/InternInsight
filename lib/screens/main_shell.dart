@@ -27,7 +27,10 @@ class _MainShellState extends State<MainShell> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      body: _pages[_index],
+      body: IndexedStack(
+        index: _index,
+        children: _pages,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _index,
         onTap: (i) => setState(() => _index = i),

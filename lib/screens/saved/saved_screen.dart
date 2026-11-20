@@ -56,30 +56,55 @@ class SavedScreen extends StatelessWidget {
               );
             }
 
-            return ListView.separated(
-              padding: AppSpacing.screen,
-              itemCount: experiences.length,
-              separatorBuilder: (context, index) {
-                return const SizedBox(height: AppSpacing.sm);
-              },
-              itemBuilder: (context, index) {
-                final experience = experiences[index];
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: AppSpacing.screen,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          '${experiences.length} saved posts',
+                          style: AppTextStyles.label,
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      const Text(
+                        'Recently saved',
+                        style: AppTextStyles.caption,
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: ListView.separated(
+                    padding: AppSpacing.screen,
+                    itemCount: experiences.length,
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(height: AppSpacing.sm);
+                    },
+                    itemBuilder: (context, index) {
+                      final experience = experiences[index];
 
-                return ExperienceCard(
-                  key: ValueKey(experience.id),
-                  experience: experience,
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      AppRoutes.experienceDetail,
-                      arguments: experience,
-                    );
-                  },
-                  onRemove: () {
-                    savedExperiences.remove(experience.id);
-                  },
-                );
-              },
+                      return ExperienceCard(
+                        key: ValueKey(experience.id),
+                        experience: experience,
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            AppRoutes.experienceDetail,
+                            arguments: experience,
+                          );
+                        },
+                        onRemove: () {
+                          savedExperiences.remove(experience.id);
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
             );
           },
         ),

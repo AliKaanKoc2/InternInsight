@@ -15,7 +15,7 @@ class SavedExperiences extends ChangeNotifier {
     if (contains(experience.id)) {
       remove(experience.id);
     } else {
-      _items.add(experience);
+      _items.insert(0, experience);
       notifyListeners();
     }
   }
