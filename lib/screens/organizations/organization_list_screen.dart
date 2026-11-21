@@ -3,6 +3,7 @@ import 'package:intern_insight/core/theme/app_colors.dart';
 import 'package:intern_insight/core/theme/app_spacing.dart';
 import 'package:intern_insight/data/mock_organizations.dart';
 import 'package:intern_insight/data/models/organization.dart';
+import 'package:intern_insight/widgets/organization_card.dart';
 
 class OrganizationListScreen extends StatefulWidget {
   const OrganizationListScreen({super.key});
@@ -107,10 +108,17 @@ class _OrganizationListScreenState extends State<OrganizationListScreen> {
               ),
             ),
             Expanded(
-              child: Center(
-                child: Text(
-                  '${_filteredOrganizations.length} organizations',
-                ),
+              child: ListView.builder(
+                padding: AppSpacing.screen,
+                itemCount: _filteredOrganizations.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                    child: OrganizationCard(
+                      organization: _filteredOrganizations[index],
+                    ),
+                  );
+                },
               ),
             ),
           ],
