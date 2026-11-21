@@ -14,8 +14,7 @@ class OrganizationListScreen extends StatefulWidget {
 class _OrganizationListScreenState extends State<OrganizationListScreen> {
   int _selectedTab = 0;
   final Set<String> _selectedIndustries = {};
-  final List<String> _industries = ['Software', 'Finance', 'Gaming', 'Health', 'Defense', 'Automotive', 'Consulting', 'Education'];
-
+  final List<String> _industries = ['Software', 'Artificial Intelligence', 'Mobile Development', 'Finance', 'Gaming', 'Health', 'Defense', 'Automotive', 'Consulting', 'Education'];
   final List<String> _tabTypes = ['All', 'Company', 'University', 'Research'];
 
   List<Organization> get _filteredOrganizations {
