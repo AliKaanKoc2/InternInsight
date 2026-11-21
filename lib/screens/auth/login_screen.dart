@@ -23,7 +23,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
       body: SafeArea(
         child: Form(
           key: _formKey,
@@ -74,11 +73,15 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: AppSpacing.lg),
               ElevatedButton(onPressed: _logIn, child: const Text('Log in')),
+              const TextButton(
+                onPressed: null,
+                child: Text('Forgot password?'),
+              ),
               TextButton(
                 onPressed: () {
                   Navigator.pushNamed(context, AppRoutes.register);
                 },
-                child: const Text('Sign up'),
+                child: const Text('No account? Sign up'),
               ),
             ],
           ),
