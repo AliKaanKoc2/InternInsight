@@ -3,7 +3,7 @@ import 'package:intern_insight/core/theme/app_spacing.dart';
 
 import '../../data/mock_verification_requests.dart';
 import '../../data/models/verification_request.dart';
-import '../../core/routes/app_routes.dart';
+import 'review_screen.dart';
 import '../../core/theme/app_colors.dart';
 
 class AdminScreen extends StatefulWidget {
@@ -75,10 +75,11 @@ class _AdminScreenState extends State<AdminScreen> {
                     ),
                   ),
                   onTap: () {
-                    Navigator.pushNamed(
+                    Navigator.push(
                       context,
-                      AppRoutes.review,
-                      arguments: request,
+                      MaterialPageRoute<void>(
+                        builder: (context) => ReviewScreen(request: request),
+                      ),
                     );
                   },
                 ),
