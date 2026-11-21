@@ -104,14 +104,14 @@ class FollowingScreen extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(AppSpacing.md),
                             child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 const Icon(
                                   Icons.business_outlined,
                                   size: 32,
                                   color: AppColors.primary,
                                 ),
-                                const SizedBox(width: AppSpacing.sm),
+                                const SizedBox(width: AppSpacing.md),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,20 +133,20 @@ class FollowingScreen extends StatelessWidget {
                                         style: AppTextStyles.caption,
                                       ),
                                       const SizedBox(height: AppSpacing.sm),
-                                      OutlinedButton(
-                                        style: OutlinedButton.styleFrom(
-                                          minimumSize: const Size(0, 36),
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: AppSpacing.sm,
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          followedOrganizations.remove(organization.id);
-                                        },
-                                        child: const Text('Unfollow'),
-                                      ),
                                     ],
                                   ),
+                                ),
+                                OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    minimumSize: const Size(0, 36),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: AppSpacing.sm,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    followedOrganizations.remove(organization.id);
+                                  },
+                                  child: const Text('Unfollow'),
                                 ),
                               ],
                             ),
