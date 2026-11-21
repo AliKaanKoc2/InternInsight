@@ -17,17 +17,23 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   String _query = '';
   String _sort = 'Most relevant';
-  bool _showFilters = false;
-  bool _verifiedOnly = false;
+  SearchFilterValues _filters = SearchFilterValues();
 
-  List<Experience> get _results {
-    final query = _query.trim().toLowerCase();
-    final results = mockExperiences.where((experience) {
+  List<Experience> _matchingExperiences(
+    String query,
+    SearchFilterValues filters,
+  ) {
+    return mockExperiences.where((experience) {
       final matchesQuery =
           experience.company.toLowerCase().contains(query) ||
           experience.position.toLowerCase().contains(query);
-      return matchesQuery && (!_verifiedOnly || experience.isVerified);
+      return matchesQuery && filters.matches(experience);
     }).toList();
+  }
+
+  List<Experience> get _results {
+    final query = _query.trim().toLowerCase();
+    final results = _matchingExperiences(query, _filters);
 
     results.sort((a, b) {
       if (_sort == 'Top rated') {
@@ -54,15 +60,39 @@ class _SearchScreenState extends State<SearchScreen> {
     return 0;
   }
 
-  void _setVerifiedOnly(bool value) {
-    setState(() {
-      _verifiedOnly = value;
-    });
+  Future<void> _openFilters() async {
+    final query = _query.trim().toLowerCase();
+    final filters = await showModalBottomSheet<SearchFilterValues>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (sheetContext) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.viewInsetsOf(sheetContext).bottom,
+          ),
+          child: FractionallySizedBox(
+            heightFactor: 0.92,
+            child: SearchFilters(
+              initialValues: _filters,
+              countMatches: (draft) =>
+                  _matchingExperiences(query, draft).length,
+            ),
+          ),
+        );
+      },
+    );
+    if (mounted && filters != null) {
+      setState(() {
+        _filters = filters;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final results = _results;
+    final chips = buildSearchFilterChips(_filters, setState);
     return Scaffold(
       appBar: AppBar(title: const Text('Search')),
       body: SafeArea(
@@ -86,27 +116,18 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
                 const SizedBox(width: AppSpacing.sm),
                 TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _showFilters = !_showFilters;
-                    });
-                  },
-                  child: Text(_showFilters ? 'Hide filters' : 'Filters'),
+                  onPressed: _openFilters,
+                  child: Text(
+                    chips.isEmpty ? 'Filters' : 'Filters ${chips.length}',
+                  ),
                 ),
               ],
             ),
-            if (_showFilters)
-              SearchFilters(
-                verifiedOnly: _verifiedOnly,
-                onVerifiedOnlyChanged: _setVerifiedOnly,
-              ),
-            if (_verifiedOnly)
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Chip(
-                  label: const Text('Verified only'),
-                  onDeleted: () => _setVerifiedOnly(false),
-                ),
+            if (chips.isNotEmpty)
+              Wrap(
+                spacing: AppSpacing.sm,
+                runSpacing: AppSpacing.xs,
+                children: chips,
               ),
             const SizedBox(height: AppSpacing.md),
             Wrap(
