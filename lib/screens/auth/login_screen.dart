@@ -73,15 +73,39 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: AppSpacing.lg),
               ElevatedButton(onPressed: _logIn, child: const Text('Log in')),
-              const TextButton(
-                onPressed: null,
-                child: Text('Forgot password?'),
+              const SizedBox(height: AppSpacing.sm),
+              TextButton(
+                onPressed: () {},
+                style: TextButton.styleFrom(
+                  minimumSize: Size.zero,
+                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: const Text('Forgot password?'),
               ),
               TextButton(
                 onPressed: () {
                   Navigator.pushNamed(context, AppRoutes.register);
                 },
-                child: const Text('No account? Sign up'),
+                style: TextButton.styleFrom(
+                  minimumSize: Size.zero,
+                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: const Text.rich(
+                  TextSpan(
+                    text: 'No account? ',
+                    children: [
+                      TextSpan(
+                        text: 'Sign up',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),

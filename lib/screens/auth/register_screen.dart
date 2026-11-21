@@ -21,7 +21,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final _graduationYears = List.generate(
     7,
-    (index) => DateTime.now().year + index,
+        (index) => DateTime.now().year + index,
   );
 
   Future<void> _submit() async {
@@ -63,7 +63,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             padding: AppSpacing.screen,
             children: [
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Full name'),
+                decoration: const InputDecoration(
+                  labelText: 'Full name',
+                  hintText: 'Name Surname',
+                ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return 'Enter your full name.';
@@ -96,7 +99,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: const InputDecoration(labelText: 'Password'),
                 validator: (value) {
                   if (value == null || value.length < 8) {
-                    return 'Use at least 8 characters.';
+                    return 'Password must be at least 8 characters';
                   }
                   return null;
                 },
@@ -105,6 +108,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               DropdownButtonFormField<String>(
                 isExpanded: true,
                 decoration: const InputDecoration(labelText: 'Major'),
+                hint: const Text('Select major'),
                 items: [
                   for (final major in _majors)
                     DropdownMenuItem(
@@ -114,7 +118,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ],
                 onChanged: (_) {},
                 validator: (value) =>
-                    value == null ? 'Select your major.' : null,
+                value == null ? 'Select your major.' : null,
               ),
               const SizedBox(height: AppSpacing.md),
               DropdownButtonFormField<int>(
@@ -126,7 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ],
                 onChanged: (_) {},
                 validator: (value) =>
-                    value == null ? 'Select your graduation year.' : null,
+                value == null ? 'Select your graduation year.' : null,
               ),
               const SizedBox(height: AppSpacing.lg),
               ElevatedButton(

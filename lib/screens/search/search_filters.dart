@@ -33,20 +33,20 @@ class SearchFilterValues {
     this.rating = defaultRating,
     this.verifiedOnly = false,
   }) : organizationTypes = List.of(organizationTypes),
-       industries = List.of(industries),
-       technologies = List.of(technologies);
+        industries = List.of(industries),
+        technologies = List.of(technologies);
 
   SearchFilterValues.copy(SearchFilterValues other)
-    : this(
-        organizationTypes: other.organizationTypes,
-        industries: other.industries,
-        technologies: other.technologies,
-        country: other.country,
-        city: other.city,
-        workType: other.workType,
-        rating: other.rating,
-        verifiedOnly: other.verifiedOnly,
-      );
+      : this(
+    organizationTypes: other.organizationTypes,
+    industries: other.industries,
+    technologies: other.technologies,
+    country: other.country,
+    city: other.city,
+    workType: other.workType,
+    rating: other.rating,
+    verifiedOnly: other.verifiedOnly,
+  );
 
   bool matches(Experience experience) {
     if ((verifiedOnly && !experience.isVerified) ||
@@ -69,7 +69,7 @@ class SearchFilterValues {
             ? 'Research'
             : organization.type;
         return (organizationTypes.isEmpty ||
-                organizationTypes.contains(type)) &&
+            organizationTypes.contains(type)) &&
             (industries.isEmpty || industries.contains(organization.industry));
       }
     }
@@ -78,9 +78,9 @@ class SearchFilterValues {
 }
 
 List<Chip> buildSearchFilterChips(
-  SearchFilterValues filters,
-  void Function(VoidCallback) applyChange,
-) {
+    SearchFilterValues filters,
+    void Function(VoidCallback) applyChange,
+    ) {
   Chip removable(String label, VoidCallback remove) {
     return Chip(label: Text(label), onDeleted: () => applyChange(remove));
   }
@@ -101,7 +101,7 @@ List<Chip> buildSearchFilterChips(
     if (filters.rating != SearchFilterValues.defaultRating)
       removable(
         'Rating ${filters.rating.start.toStringAsFixed(1)}–${filters.rating.end.toStringAsFixed(1)}',
-        () => filters.rating = SearchFilterValues.defaultRating,
+            () => filters.rating = SearchFilterValues.defaultRating,
       ),
     if (filters.verifiedOnly)
       removable('Verified only', () => filters.verifiedOnly = false),
@@ -160,12 +160,14 @@ class _SearchFiltersState extends State<SearchFilters> {
       children: [
         if (clearLabel != null)
           ChoiceChip(
+            showCheckmark: false,
             label: Text(clearLabel),
             selected: selected.isEmpty,
             onSelected: (_) => setState(selected.clear),
           ),
         for (final option in options)
           FilterChip(
+            showCheckmark: false,
             label: Text(option),
             selected: selected.contains(option),
             onSelected: (enabled) {
@@ -183,11 +185,11 @@ class _SearchFiltersState extends State<SearchFilters> {
   }
 
   Widget _locationDropdown(
-    String label,
-    String value,
-    Iterable<String> options,
-    ValueChanged<String> onChanged,
-  ) {
+      String label,
+      String value,
+      Iterable<String> options,
+      ValueChanged<String> onChanged,
+      ) {
     return InputDecorator(
       decoration: InputDecoration(labelText: label),
       child: DropdownButtonHideUnderline(
@@ -225,7 +227,7 @@ class _SearchFiltersState extends State<SearchFilters> {
     };
     final technologyQuery = _technologyController.text.trim().toLowerCase();
     final matchingTechnologies = _technologies.where(
-      (technology) => technology.toLowerCase().contains(technologyQuery),
+          (technology) => technology.toLowerCase().contains(technologyQuery),
     );
     final heading = Row(
       children: [
@@ -250,8 +252,8 @@ class _SearchFiltersState extends State<SearchFilters> {
         children: [
           Expanded(
             child: _locationDropdown('Country', _draft.country, _countries, (
-              value,
-            ) {
+                value,
+                ) {
               if (value != _draft.country) {
                 _draft.country = value;
                 _draft.city = '';
@@ -300,6 +302,7 @@ class _SearchFiltersState extends State<SearchFilters> {
         children: [
           for (final option in ['', 'On-site', 'Hybrid', 'Remote'])
             ChoiceChip(
+              showCheckmark: false,
               label: Text(option.isEmpty ? 'Any' : option),
               selected: _draft.workType == option,
               onSelected: (selected) {
