@@ -4,6 +4,8 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../data/mock_data.dart';
+import '../../data/mock_verification_requests.dart';
+import '../../data/models/verification_request.dart';
 
 class VerificationScreen extends StatefulWidget {
   const VerificationScreen({super.key});
@@ -17,6 +19,26 @@ class _VerificationScreenState extends State<VerificationScreen> {
   String? _fileName;
   bool _showFileError = false;
 
+  // mock: the logged-in student's requests
+  final List<String> _myRequestIds = ['req_001', 'req_005', 'req_006'];
+
+  List<VerificationRequest> get _myRequests {
+    final List<VerificationRequest> result = [];
+    for (final request in mockVerificationRequests) {
+      if (_myRequestIds.contains(request.id)) {
+        result.add(request);
+      }
+    }
+    return result;
+  }
+
+  Color _statusColor(String status) {
+    if (status == 'Approved') return AppColors.success;
+    if (status == 'Rejected') return AppColors.error;
+    return AppColors.warning;
+  }
+
+  // UI only for now: pressing the box pretends a file was picked
   void _pickFile() {
     setState(() {
       _fileName = 'internship_certificate.pdf';
@@ -31,13 +53,16 @@ class _VerificationScreenState extends State<VerificationScreen> {
     });
     if (!formValid || _fileName == null) return;
 
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Request submitted')));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Request submitted')),
+    );
     Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
+    final requests = _myRequests;
+
     return Scaffold(
       appBar: AppBar(title: const Text('Verify internship')),
       body: ListView(
@@ -61,7 +86,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
               ],
               onChanged: (_) {},
               validator: (value) =>
-                  value == null ? 'Select the internship to verify.' : null,
+              value == null ? 'Select the internship to verify.' : null,
             ),
           ),
           const SizedBox(height: AppSpacing.md),
@@ -99,6 +124,39 @@ class _VerificationScreenState extends State<VerificationScreen> {
             onPressed: _submit,
             child: const Text('Submit request'),
           ),
+          const SizedBox(height: AppSpacing.xl),
+
+          // my requests
+          Row(
+            children: [
+              const Expanded(
+                child: Text('My requests', style: AppTextStyles.heading),
+              ),
+              Text('${requests.length} total', style: AppTextStyles.caption),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          for (final request in requests)
+            Padding(
+              padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+              child: Card(
+                child: ListTile(
+                  titleAlignment: ListTileTitleAlignment.center,
+                  title: Text(request.organizationName),
+                  subtitle: Text(
+                    '${request.role}\nSubmitted ${request.submittedAt}',
+                  ),
+                  isThreeLine: true,
+                  trailing: Text(
+                    request.status,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: _statusColor(request.status),
+                    ),
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
