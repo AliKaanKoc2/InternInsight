@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_spacing.dart';
+import '../../core/theme/app_text_styles.dart';
 import '../../data/mock_organizations.dart';
 
 class AddExperienceScreen extends StatefulWidget {
@@ -13,6 +14,7 @@ class AddExperienceScreen extends StatefulWidget {
 class _AddExperienceScreenState extends State<AddExperienceScreen> {
   final _stepOneKey = GlobalKey<FormState>();
   int _step = 0;
+  bool _anonymous = false;
 
   final List<String> _departments = [
     'Software',
@@ -24,6 +26,9 @@ class _AddExperienceScreenState extends State<AddExperienceScreen> {
     'HR',
     'Other',
   ];
+  final List<String> _cities = ['Istanbul', 'Ankara', 'Izmir', 'Kocaeli', 'Other'];
+  final List<String> _workTypes = ['On-site', 'Hybrid', 'Remote'];
+  final List<String> _currencies = ['TRY', 'USD', 'EUR'];
 
   String? _required(String? value) {
     if (value == null || value.trim().isEmpty) {
@@ -71,9 +76,10 @@ class _AddExperienceScreenState extends State<AddExperienceScreen> {
     );
   }
 
-  Widget _dropdown(String label, List<String> items) {
+  Widget _dropdown(String label, List<String> items, {String? initial}) {
     return DropdownButtonFormField<String>(
       isExpanded: true,
+      initialValue: initial,
       decoration: InputDecoration(labelText: label),
       hint: const Text('Select'),
       items: [
@@ -148,6 +154,71 @@ class _AddExperienceScreenState extends State<AddExperienceScreen> {
                   ),
                   validator: _date,
                 ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.md),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: _dropdown('Country', ['Turkey', 'Other'], initial: 'Turkey'),
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(child: _dropdown('City', _cities)),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.md),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: _dropdown('Working type', _workTypes, initial: 'On-site')),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Salary (optional)',
+                    hintText: 'Amount',
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.md),
+          DropdownButtonFormField<String>(
+            isExpanded: true,
+            decoration: const InputDecoration(labelText: 'Currency'),
+            hint: const Text('Select'),
+            items: [
+              for (final currency in _currencies)
+                DropdownMenuItem(value: currency, child: Text(currency)),
+            ],
+            onChanged: (_) {},
+          ),
+          const SizedBox(height: AppSpacing.md),
+          TextFormField(
+            maxLines: 4,
+            decoration: const InputDecoration(
+              labelText: 'Project description',
+              hintText: 'Your tasks and what was expected from you',
+              alignLabelWithHint: true,
+            ),
+            validator: _required,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Row(
+            children: [
+              const Expanded(
+                child: Text('Post anonymously', style: AppTextStyles.body),
+              ),
+              Switch(
+                value: _anonymous,
+                onChanged: (value) {
+                  setState(() {
+                    _anonymous = value;
+                  });
+                },
               ),
             ],
           ),
