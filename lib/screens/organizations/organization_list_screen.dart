@@ -108,7 +108,14 @@ class _OrganizationListScreenState extends State<OrganizationListScreen> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
+              child: _filteredOrganizations.isEmpty
+                  ? const Center(
+                child: Text(
+                  'No organizations found',
+                  style: TextStyle(color: AppColors.textSecondary),
+                ),
+              )
+                  : ListView.builder(
                 padding: AppSpacing.screen,
                 itemCount: _filteredOrganizations.length,
                 itemBuilder: (context, index) {
