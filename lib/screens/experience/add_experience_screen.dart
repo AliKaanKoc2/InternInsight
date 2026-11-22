@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../data/mock_organizations.dart';
@@ -13,8 +14,11 @@ class AddExperienceScreen extends StatefulWidget {
 
 class _AddExperienceScreenState extends State<AddExperienceScreen> {
   final _stepOneKey = GlobalKey<FormState>();
+  final _stepTwoKey = GlobalKey<FormState>();
   int _step = 0;
   bool _anonymous = false;
+  int _rating = 0;
+  bool _showRatingError = false;
 
   final List<String> _departments = [
     'Software',
@@ -26,9 +30,29 @@ class _AddExperienceScreenState extends State<AddExperienceScreen> {
     'HR',
     'Other',
   ];
-  final List<String> _cities = ['Istanbul', 'Ankara', 'Izmir', 'Kocaeli', 'Other'];
+  final List<String> _cities = [
+    'Istanbul',
+    'Ankara',
+    'Izmir',
+    'Kocaeli',
+    'Other',
+  ];
   final List<String> _workTypes = ['On-site', 'Hybrid', 'Remote'];
   final List<String> _currencies = ['TRY', 'USD', 'EUR'];
+  final List<String> _channels = [
+    'Career site',
+    'LinkedIn',
+    'Referral',
+    'University',
+    'Other',
+  ];
+  final List<String> _interviewTypes = [
+    'Technical',
+    'HR',
+    'Case study',
+    'Mixed',
+  ];
+  final List<String> _difficulties = ['1/5', '2/5', '3/5', '4/5', '5/5'];
 
   String? _required(String? value) {
     if (value == null || value.trim().isEmpty) {
@@ -55,7 +79,7 @@ class _AddExperienceScreenState extends State<AddExperienceScreen> {
       return 'Day must be 1-31.';
     }
     if (year < 2000 || year > 2030) {
-      return 'Enter a year between 2000 and 2030.';
+      return 'Year: 2000-2030.';
     }
     return null;
   }
@@ -162,7 +186,10 @@ class _AddExperienceScreenState extends State<AddExperienceScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: _dropdown('Country', ['Turkey', 'Other'], initial: 'Turkey'),
+                child: _dropdown('Country', [
+                  'Turkey',
+                  'Other',
+                ], initial: 'Turkey'),
               ),
               const SizedBox(width: AppSpacing.sm),
               Expanded(child: _dropdown('City', _cities)),
@@ -172,7 +199,13 @@ class _AddExperienceScreenState extends State<AddExperienceScreen> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(child: _dropdown('Working type', _workTypes, initial: 'On-site')),
+              Expanded(
+                child: _dropdown(
+                  'Working type',
+                  _workTypes,
+                  initial: 'On-site',
+                ),
+              ),
               const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: TextFormField(
@@ -227,6 +260,115 @@ class _AddExperienceScreenState extends State<AddExperienceScreen> {
     );
   }
 
+  Widget _buildStepTwo() {
+    return Form(
+      key: _stepTwoKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Review', style: AppTextStyles.heading),
+          const SizedBox(height: AppSpacing.sm),
+          Row(
+            children: [
+              const Expanded(
+                child: Text('Overall rating', style: AppTextStyles.body),
+              ),
+              for (int i = 1; i <= 5; i++)
+                IconButton(
+                  visualDensity: VisualDensity.compact,
+                  onPressed: () {
+                    setState(() {
+                      _rating = i;
+                      _showRatingError = false;
+                    });
+                  },
+                  icon: Icon(
+                    i <= _rating ? Icons.star : Icons.star_border,
+                    color: AppColors.warning,
+                  ),
+                ),
+            ],
+          ),
+          if (_showRatingError)
+            const Text(
+              'Give a rating.',
+              style: TextStyle(fontSize: 12, color: AppColors.error),
+            ),
+          const SizedBox(height: AppSpacing.sm),
+          TextFormField(
+            maxLines: 3,
+            decoration: const InputDecoration(
+              labelText: 'Comment',
+              hintText: 'How was your internship?',
+              alignLabelWithHint: true,
+            ),
+            validator: _required,
+          ),
+          const SizedBox(height: AppSpacing.md),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: TextFormField(
+                  maxLines: 3,
+                  decoration: const InputDecoration(
+                    labelText: 'Pros (optional)',
+                    alignLabelWithHint: true,
+                  ),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: TextFormField(
+                  maxLines: 3,
+                  decoration: const InputDecoration(
+                    labelText: 'Cons (optional)',
+                    alignLabelWithHint: true,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          const Text('Interview process', style: AppTextStyles.heading),
+          const SizedBox(height: AppSpacing.sm),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: _dropdown('Applied via', _channels)),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Rounds',
+                    hintText: 'e.g. 2',
+                  ),
+                  validator: (value) {
+                    final rounds = int.tryParse(value ?? '');
+                    if (rounds == null || rounds < 1 || rounds > 10) {
+                      return 'Enter 1-10.';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.md),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: _dropdown('Interview type', _interviewTypes)),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(child: _dropdown('Difficulty', _difficulties)),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -247,7 +389,7 @@ class _AddExperienceScreenState extends State<AddExperienceScreen> {
           ),
           const SizedBox(height: AppSpacing.lg),
           Offstage(offstage: _step != 0, child: _buildStepOne()),
-          if (_step == 1) const Text('Step 2-4 fields'),
+          Offstage(offstage: _step != 1, child: _buildStepTwo()),
           const SizedBox(height: AppSpacing.lg),
           if (_step == 0)
             ElevatedButton(
