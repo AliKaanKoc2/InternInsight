@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/routes/app_routes.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
@@ -19,6 +20,14 @@ class _AddExperienceScreenState extends State<AddExperienceScreen> {
   bool _anonymous = false;
   int _rating = 0;
   bool _showRatingError = false;
+  final List<String> _technologies = ['Python', 'SQL'];
+  final _techController = TextEditingController();
+
+  @override
+  void dispose() {
+    _techController.dispose();
+    super.dispose();
+  }
 
   final List<String> _departments = [
     'Software',
@@ -30,28 +39,11 @@ class _AddExperienceScreenState extends State<AddExperienceScreen> {
     'HR',
     'Other',
   ];
-  final List<String> _cities = [
-    'Istanbul',
-    'Ankara',
-    'Izmir',
-    'Kocaeli',
-    'Other',
-  ];
+  final List<String> _cities = ['Istanbul', 'Ankara', 'Izmir', 'Kocaeli', 'Other'];
   final List<String> _workTypes = ['On-site', 'Hybrid', 'Remote'];
   final List<String> _currencies = ['TRY', 'USD', 'EUR'];
-  final List<String> _channels = [
-    'Career site',
-    'LinkedIn',
-    'Referral',
-    'University',
-    'Other',
-  ];
-  final List<String> _interviewTypes = [
-    'Technical',
-    'HR',
-    'Case study',
-    'Mixed',
-  ];
+  final List<String> _channels = ['Career site', 'LinkedIn', 'Referral', 'University', 'Other'];
+  final List<String> _interviewTypes = ['Technical', 'HR', 'Case study', 'Mixed'];
   final List<String> _difficulties = ['1/5', '2/5', '3/5', '4/5', '5/5'];
 
   String? _required(String? value) {
@@ -115,6 +107,89 @@ class _AddExperienceScreenState extends State<AddExperienceScreen> {
       ],
       onChanged: (_) {},
       validator: _select,
+    );
+  }
+
+  void _addTechnology() {
+    _techController.clear();
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('Add technology'),
+          content: TextField(
+            controller: _techController,
+            autofocus: true,
+            decoration: const InputDecoration(hintText: 'e.g. Flutter'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(dialogContext);
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                final tech = _techController.text.trim();
+                if (tech.isNotEmpty && !_technologies.contains(tech)) {
+                  setState(() {
+                    _technologies.add(tech);
+                  });
+                }
+                Navigator.pop(dialogContext);
+              },
+              child: const Text('Add'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _submit() {
+    final formValid = _stepTwoKey.currentState!.validate();
+    setState(() {
+      _showRatingError = _rating == 0;
+    });
+    if (!formValid || _rating == 0) return;
+
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('Share this internship?'),
+          content: const Text(
+            'Your post will be published as unverified. '
+                'You can request verification later from your profile.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(dialogContext);
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(dialogContext);
+                _stepOneKey.currentState!.reset();
+                _stepTwoKey.currentState!.reset();
+                setState(() {
+                  _step = 0;
+                  _rating = 0;
+                  _anonymous = false;
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Post published')),
+                );
+                Navigator.pushNamed(context, AppRoutes.profile);
+              },
+              child: const Text('Submit'),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -186,10 +261,7 @@ class _AddExperienceScreenState extends State<AddExperienceScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: _dropdown('Country', [
-                  'Turkey',
-                  'Other',
-                ], initial: 'Turkey'),
+                child: _dropdown('Country', ['Turkey', 'Other'], initial: 'Turkey'),
               ),
               const SizedBox(width: AppSpacing.sm),
               Expanded(child: _dropdown('City', _cities)),
@@ -199,13 +271,7 @@ class _AddExperienceScreenState extends State<AddExperienceScreen> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: _dropdown(
-                  'Working type',
-                  _workTypes,
-                  initial: 'On-site',
-                ),
-              ),
+              Expanded(child: _dropdown('Working type', _workTypes, initial: 'On-site')),
               const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: TextFormField(
@@ -364,6 +430,29 @@ class _AddExperienceScreenState extends State<AddExperienceScreen> {
               Expanded(child: _dropdown('Difficulty', _difficulties)),
             ],
           ),
+          const SizedBox(height: AppSpacing.lg),
+          const Text('Technologies', style: AppTextStyles.heading),
+          const SizedBox(height: AppSpacing.sm),
+          Wrap(
+            spacing: AppSpacing.sm,
+            runSpacing: AppSpacing.xs,
+            children: [
+              for (final tech in _technologies)
+                Chip(
+                  label: Text(tech),
+                  onDeleted: () {
+                    setState(() {
+                      _technologies.remove(tech);
+                    });
+                  },
+                ),
+              ActionChip(
+                avatar: const Icon(Icons.add, size: 18),
+                label: const Text('Add'),
+                onPressed: _addTechnology,
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -418,7 +507,7 @@ class _AddExperienceScreenState extends State<AddExperienceScreen> {
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: _submit,
                     child: const Text('Submit'),
                   ),
                 ),
